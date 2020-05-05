@@ -1,0 +1,117 @@
+service:
+  name: todolist3-severside
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+#org: your-org-name
+
+custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+  serverless-layers:
+    layersDeploymentBucket
+  serverless-offline:
+    httpPort: 50001
+    useChildProcesses: true
+  dynamodb:
+    stages:
+      - dev
+    start:
+      port: 50000
+      migrate: true
+      seed: true
+    seed:
+      development:
+        sources:
+          - 
+            table: todolist3-timelist
+            sources: [./migrations/timelist.json]
+          -
+            table: todolist3-remaining-tasks
+            sources: [./migrations/remaining-tasks.json]
+
+# Add the serverless-webpack plugin
+plugins:
+  - serverless-webpack
+  - serverless-layers
+  - serverless-dynamodb-local
+  - serverless-offline
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: ap-northeast-1
+  apiGateway:
+    minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+
+functions:
+  hello: #Lambda function name
+    handler: src/handler.hello
+    events:
+      - http: # API Gateways
+          method: get 
+          path: hello
+  getRemainingTasks:
+    handler: src/handler.getRemainingTasks
+    events:
+      - http:
+          method: get 
+          path: getRemainingTasks
+  
+
+resources:
+  Resources:
+    timelistdb:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: todolist3-timelist
+        AttributeDefinitions:
+          - 
+            AttributeName: id
+            AttributeType: N
+          # - 
+          #   AttributeName: loginId
+          #   AttributeType: S
+          # - 
+          #   AttributeName: timeRangeIndex
+          #   AttributeType: N
+          # - 
+          #   AttributeName: title
+          #   AttributeType: S
+          # - 
+          #   AttributeName: content
+          #   AttributeType: S
+          # - 
+          #   AttributeName: date
+          #   AttributeType: S
+          # - 
+          #   AttributeName: isCurrent
+          #   AttributeType: B
+
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+
+        BillingMode: PAY_PER_REQUEST # On-Demand用設定値
+    remaining-tasksdb:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: todolist3-remaining-tasks
+        AttributeDefinitions:
+          - 
+            AttributeName: id
+            AttributeType: N
+          # - 
+          #   AttributeName: loginId
+          #   AttributeType: S
+          # - 
+          #   AttributeName: content
+          #   AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+
+        BillingMode: PAY_PER_REQUEST # On-Demand用設定値
