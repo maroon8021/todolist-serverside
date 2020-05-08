@@ -19,7 +19,7 @@ jobs:
       with:
           node-version: '13.x'
     - name: Install Dependencies
-      run: 
+      run: |
         yarn add global serverless
         yarn
 
