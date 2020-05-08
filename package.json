@@ -7,7 +7,8 @@
     "local_hello": "serverless invoke local -f hello",
     "db_start": "SLS_DEBUG=* sls dynamodb start",
     "local": "sls offline",
-    "test": "jest --silent=false"
+    "test": "jest --silent=false",
+    "deploy": "sls deploy -v --stage prod"
   },
   "dependencies": {
     "aws-sdk": "^2.668.0",

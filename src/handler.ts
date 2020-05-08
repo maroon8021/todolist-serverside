@@ -348,7 +348,7 @@ export const getSampleData: APIGatewayProxyHandler =  async (event:GetSampleData
   let result = {
     statusCode: 200,
     body: JSON.stringify({
-      message: sample + '_updated'
+      message: sample + '_updated_1803'
     })
   }
   return result
