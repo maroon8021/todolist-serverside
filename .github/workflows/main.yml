@@ -19,12 +19,10 @@ jobs:
       with:
           node-version: '13.x'
     - name: Install Dependencies
-      run: |
-        yarn add global serverless
-        yarn
+      run: yarn
 
     - name: Deploy to lambda
-      run: sls deploy -v --stage prod
+      run: npx sls deploy -v --stage prod
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
