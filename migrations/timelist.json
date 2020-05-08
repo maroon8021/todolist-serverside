@@ -1,11 +1,18 @@
 [
   {
     "id": 1,
-    "loginId": "00295cc6-bb19-4aa1-8da3-fa54ed3c6b73",
-    "timeRangeIndex": 0,
-    "title": "test-title",
-    "content": "test-content",
-    "data": "2020-04-26",
-    "isCurrent": true
+    "userId": "test-user",
+    "timeListIndex": 0,
+    "title": "test-title 10:00~11:00",
+    "content": "This timelist should not be shown ever",
+    "date": "2020-05-06"
+  },
+  {
+    "id": 2,
+    "userId": "test-user",
+    "timeListIndex": 2,
+    "title": "test-title 12:00~13:00",
+    "content": "This timelist should not be shown ever",
+    "date": "2020-05-06"
   }
 ]

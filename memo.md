@@ -13,3 +13,9 @@ https://www.to-mega-therion.net/dynamodb/dynamodb-local-attributes
 
 
 https://github.com/serverless-heaven/serverless-webpack/issues/566
+
+
+https://blog.codecentric.de/en/2019/08/developing-aws-locally-with-serverless-offline-plugins/
+
+
+https://blog.brains-tech.co.jp/entry/2015/09/30/222148

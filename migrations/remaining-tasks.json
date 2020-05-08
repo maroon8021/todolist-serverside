@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "loginId": "00295cc6-bb19-4aa1-8da3-fa54ed3c6b73",
+    "userId": "test-user",
     "content": "test-content"
   }
 ]
