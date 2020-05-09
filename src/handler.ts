@@ -1,6 +1,6 @@
 import { DynamoDB } from "aws-sdk"
 import { APIGatewayProxyHandler, APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import 'source-map-support/register';
+//import 'source-map-support/register';
 
 export const TABLE_NAMES = {
   TIMELIST:'todolist3-timelist',
@@ -348,7 +348,7 @@ export const getSampleData: APIGatewayProxyHandler =  async (event:GetSampleData
   let result = {
     statusCode: 200,
     body: JSON.stringify({
-      message: sample + '_updated_1803'
+      message: sample + '_updated_0509_1125'
     })
   }
   return result

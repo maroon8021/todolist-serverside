@@ -5,10 +5,12 @@
   "main": "handler.js",
   "scripts": {
     "local_hello": "serverless invoke local -f hello",
-    "db_start": "SLS_DEBUG=* sls dynamodb start",
-    "local": "sls offline",
+    "db_start": "SLS_DEBUG=* sls dynamodb start -c ./config/serverless.yml",
+    "local": "sls offline -c ./config/serverless.yml",
     "test": "jest --silent=false",
-    "deploy": "sls deploy -v --stage prod"
+    "deploy": "sls deploy -v -s prod -c ./config/deploy.yml",
+    "deploy_setup": "sh setup.sh",
+    "plugin_install": "sls plugin install -c ./config/serverless.yml -n "
   },
   "dependencies": {
     "aws-sdk": "^2.668.0",
@@ -21,14 +23,14 @@
     "fork-ts-checker-webpack-plugin": "^3.0.1",
     "jest": "^25.5.4",
     "serverless-dotenv-plugin": "^2.4.2",
-    "serverless-dynamodb-local": "0.2.30",
+    "serverless-dynamodb-local": "^0.2.39",
     "serverless-layers": "^2.1.3",
     "serverless-offline": "^6.1.4",
-    "serverless-webpack": "^5.2.0",
+    "serverless-webpack": "^5.3.2",
     "ts-jest": "^25.4.0",
     "ts-loader": "^5.3.3",
     "typescript": "^3.2.4",
-    "webpack": "^4.29.0",
+    "webpack": "^4.43.0",
     "webpack-node-externals": "^1.7.2"
   },
   "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",

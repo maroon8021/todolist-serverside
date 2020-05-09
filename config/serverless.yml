@@ -1,0 +1,161 @@
+hoge: hoge
+
+huga:
+  hugahuga: hugahuga
+
+service:
+  name: todolist3-severside
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+#org: your-org-name
+
+custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+    packager: 'yarn'
+  serverless-layers:
+    layersDeploymentBucket: ${env:S3_BUCKET}
+  serverless-offline:
+    httpPort: 50001
+    useChildProcesses: true
+  dynamodb:
+    stages:
+      - dev
+    start:
+      port: 50000
+      migrate: true
+      seed: true
+    seed:
+      development:
+        sources:
+          - 
+            table: todolist3-timelist
+            sources: [./migrations/timelist.json]
+          -
+            table: todolist3-remaining-tasks
+            sources: [./migrations/remaining-tasks.json]
+
+# Add the serverless-webpack plugin
+plugins:
+  - serverless-webpack
+  - serverless-layers
+  - serverless-dynamodb-local
+  - serverless-offline
+  - serverless-dotenv-plugin
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: ap-northeast-1
+  apiGateway:
+    minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+    TZ: "Asia/Tokyo"
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource: "arn:aws:dynamodb:ap-northeast-1:*:table/todolist3-*"
+      # Resource: "arn:aws:dynamodb:ap-northeast-1:*:table/todolist3-*"
+
+functions:
+  getSampleData:
+    handler: src/handler.getSampleData
+    events:
+      - http:
+          method: get 
+          path: getSampleData
+          cors: true
+  getRemainingTasks: #Lambda function name
+    handler: src/handler.getRemainingTasks
+    events:
+      - http: # API Gateways
+          method: get 
+          path: getRemainingTasks
+          cors: true
+  postRemaingTasks:
+    handler: src/handler.postRemaingTasks
+    events:
+      - http:
+          method: post 
+          path: postRemaingTasks
+          cors: true
+  getTimeLists:
+    handler: src/handler.getTimeLists
+    events:
+      - http:
+          method: get 
+          path: getTimeLists
+          cors: true
+  postTimeLists:
+    handler: src/handler.postTimeLists
+    events:
+      - http:
+          method: post 
+          path: postTimeLists
+          cors: true
+
+resources:
+  Resources:
+    timelistdb:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: todolist3-timelist
+        AttributeDefinitions:
+          - 
+            AttributeName: userId
+            AttributeType: S
+          - 
+            AttributeName: id
+            AttributeType: N
+          
+          # - 
+          #   AttributeName: userId
+          #   AttributeType: S
+          # - 
+          #   AttributeName: timeListIndex
+          #   AttributeType: N
+          # - 
+          #   AttributeName: title
+          #   AttributeType: S
+          # - 
+          #   AttributeName: content
+          #   AttributeType: S
+          # - 
+          #   AttributeName: isCurrent
+          #   AttributeType: B
+
+        KeySchema:
+          -
+            AttributeName: userId
+            KeyType: HASH
+          -
+            AttributeName: id
+            KeyType: RANGE
+          
+
+        BillingMode: PAY_PER_REQUEST # On-Demand用設定値
+    remainingTasksdb:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: todolist3-remaining-tasks
+        AttributeDefinitions:
+          - 
+            AttributeName: userId
+            AttributeType: S
+          # - 
+          #   AttributeName: id
+          #   AttributeType: N
+          # - 
+          #   AttributeName: content
+          #   AttributeType: S
+        KeySchema:
+          -
+            AttributeName: userId
+            KeyType: HASH
+          # -
+          #   AttributeName: id
+          #   KeyType: HASH
+
+        BillingMode: PAY_PER_REQUEST # On-Demand用設定値

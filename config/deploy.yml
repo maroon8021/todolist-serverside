@@ -1,13 +1,11 @@
 service:
   name: todolist3-severside
-# app and org for use with dashboard.serverless.com
-#app: your-app-name
-#org: your-org-name
 
 custom:
   webpack:
     webpackConfig: ./webpack.config.js
     includeModules: true
+    packager: 'yarn'
   serverless-layers:
     layersDeploymentBucket: ${env:S3_BUCKET}
   serverless-offline:
@@ -90,66 +88,9 @@ functions:
           path: postTimeLists
           cors: true
 
-# resources:
-#   Resources:
-#     timelistdb:
-#       Type: 'AWS::DynamoDB::Table'
-#       Properties:
-#         TableName: todolist3-timelist
-#         AttributeDefinitions:
-#           - 
-#             AttributeName: userId
-#             AttributeType: S
-#           - 
-#             AttributeName: id
-#             AttributeType: N
-          
-#           # - 
-#           #   AttributeName: userId
-#           #   AttributeType: S
-#           # - 
-#           #   AttributeName: timeListIndex
-#           #   AttributeType: N
-#           # - 
-#           #   AttributeName: title
-#           #   AttributeType: S
-#           # - 
-#           #   AttributeName: content
-#           #   AttributeType: S
-#           # - 
-#           #   AttributeName: isCurrent
-#           #   AttributeType: B
 
-#         KeySchema:
-#           -
-#             AttributeName: userId
-#             KeyType: HASH
-#           -
-#             AttributeName: id
-#             KeyType: RANGE
-          
-
-#         BillingMode: PAY_PER_REQUEST # On-Demand用設定値
-#     remainingTasksdb:
-#       Type: 'AWS::DynamoDB::Table'
-#       Properties:
-#         TableName: todolist3-remaining-tasks
-#         AttributeDefinitions:
-#           - 
-#             AttributeName: userId
-#             AttributeType: S
-#           # - 
-#           #   AttributeName: id
-#           #   AttributeType: N
-#           # - 
-#           #   AttributeName: content
-#           #   AttributeType: S
-#         KeySchema:
-#           -
-#             AttributeName: userId
-#             KeyType: HASH
-#           # -
-#           #   AttributeName: id
-#           #   KeyType: HASH
-
-#         BillingMode: PAY_PER_REQUEST # On-Demand用設定値
+# FIXME: Want to fix this like below
+# custom: ${file(./config/serverless.yml):custom}
+# plugins: ${file(./config/serverless.yml):plugins}
+# provider: ${file(./config/serverless.yml):provider}
+# functions: ${file(./config/serverless.yml):functions}

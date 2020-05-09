@@ -19,3 +19,8 @@ https://blog.codecentric.de/en/2019/08/developing-aws-locally-with-serverless-of
 
 
 https://blog.brains-tech.co.jp/entry/2015/09/30/222148
+
+
+なぜかわからんがたまに
+`yarn db_start` をすると `Error: spawn java ENOENT` が出るので、
+`sls plugin install --name serverless-dynamodb-local -c ./config/serverless.yml` をしなおすと復帰する。。。
