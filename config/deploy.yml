@@ -5,7 +5,7 @@ custom:
   webpack:
     webpackConfig: ./webpack.config.js
     includeModules: true
-    packager: 'yarn'
+    packager: "yarn"
   serverless-layers:
     layersDeploymentBucket: ${env:S3_BUCKET}
   serverless-offline:
@@ -21,12 +21,12 @@ custom:
     seed:
       development:
         sources:
-          - 
-            table: todolist3-timelist
+          - table: todolist3-timelist
             sources: [./migrations/timelist.json]
-          -
-            table: todolist3-remaining-tasks
+          - table: todolist3-remaining-tasks
             sources: [./migrations/remaining-tasks.json]
+  cors-options:
+    origin: ${env:URL}
 
 # Add the serverless-webpack plugin
 plugins:
@@ -54,41 +54,49 @@ provider:
 functions:
   getSampleData:
     handler: src/handler.getSampleData
+    environment:
+      URL: ${env:URL}
     events:
       - http:
-          method: get 
+          method: get
           path: getSampleData
-          cors: true
+          cors: ${self:custom.cors-options}
   getRemainingTasks: #Lambda function name
     handler: src/handler.getRemainingTasks
+    environment:
+      URL: ${env:URL}
     events:
       - http: # API Gateways
-          method: get 
+          method: get
           path: getRemainingTasks
-          cors: true
+          cors: ${self:custom.cors-options}
   postRemaingTasks:
     handler: src/handler.postRemaingTasks
+    environment:
+      URL: ${env:URL}
     events:
       - http:
-          method: post 
+          method: post
           path: postRemaingTasks
-          cors: true
+          cors: ${self:custom.cors-options}
   getTimeLists:
     handler: src/handler.getTimeLists
+    environment:
+      URL: ${env:URL}
     events:
       - http:
-          method: get 
+          method: get
           path: getTimeLists
-          cors: true
+          cors: ${self:custom.cors-options}
   postTimeLists:
     handler: src/handler.postTimeLists
+    environment:
+      URL: ${env:URL}
     events:
       - http:
-          method: post 
+          method: post
           path: postTimeLists
-          cors: true
-
-
+          cors: ${self:custom.cors-options}
 # FIXME: Want to fix this like below
 # custom: ${file(./config/serverless.yml):custom}
 # plugins: ${file(./config/serverless.yml):plugins}

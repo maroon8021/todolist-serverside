@@ -6,6 +6,7 @@ export const TABLE_NAMES = {
   TIMELIST:'todolist3-timelist',
   REMAINING_TASKS: 'todolist3-remaining-tasks'
 }
+const URL = process.env.URL
 const isLocal = process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development'
 const dynamoOptions = isLocal  ? { region: 'ap-northeast-1', endpoint: 'http://localhost:50000' } : { region: 'ap-northeast-1' }
 const dynamo = new DynamoDB.DocumentClient(dynamoOptions)
@@ -30,12 +31,9 @@ export const getRemainingTasks: APIGatewayProxyHandler = async (event:GetRemaini
   let result = getDefaultResult()
   try {
     const remainingTasks = await dynamo.get(params).promise()
-    result = {
-      statusCode: 200,
-      body: JSON.stringify({
-        content: remainingTasks.Item.content
-      })
-    }
+    result.body = JSON.stringify({
+      content: remainingTasks.Item.content
+    })
   } catch (error) {
     console.error(error)
   }
@@ -89,12 +87,9 @@ const updateRemainigTasks = async (event:PostProp) => {
     /* const remainingTasks = */ 
     await dynamo.update(params).promise()
     //console.log(remainingTasks)
-    result = {
-      statusCode: 200,
-      body: JSON.stringify({
-        message: 'updated'
-      })
-    }
+    result.body = JSON.stringify({
+      message: 'updated'
+    })
   } catch (error) {
     // console.error(error)
   }
@@ -117,12 +112,10 @@ const createNewRemainingTasks = async (event:PostProp) => {
     /* const remainingTasks = */ 
     await dynamo.put(params).promise()
     // console.log(remainingTasks)
-    result = {
-      statusCode: 200,
-      body: JSON.stringify({
-        message: 'created'
-      })
-    }
+    result.body = JSON.stringify({
+      message: 'created'
+    })
+    
   } catch (error) {
     console.error(error)
   }
@@ -173,12 +166,9 @@ export const getTimeLists: APIGatewayProxyHandler = async (event:GetTimeListsPro
         content
       }
     })
-    result = {
-      statusCode: 200,
-      body: JSON.stringify({
-        timelists
-      })
-    }
+    result.body = JSON.stringify({
+      timelists
+    })
     
   } catch (error) {
     console.log(error)
@@ -218,7 +208,6 @@ export const postTimeLists: APIGatewayProxyHandler = async (event:PostProp) => {
   let timeListId = 0
   try {
     const timelist = await dynamo.query(params).promise()
-    //console.log(timelist)
     hasValue = timelist.Items.length > 0
     if(hasValue){
       timeListId = timelist.Items[0].id
@@ -249,18 +238,14 @@ const updateTimeList = async (event:PostProp, id:number) => {
   }
   let result = getDefaultResult('Data is not put correctly')
 
-  console.log('updateTimeList')
-  console.log(params)
   try {
     /* const remainingTasks = */ 
     await dynamo.update(params).promise()
     //console.log(remainingTasks)
-    result = {
-      statusCode: 200,
-      body: JSON.stringify({
-        message: 'updated'
-      })
-    }
+    result.body = JSON.stringify({
+      message: 'updated'
+    })
+    
   } catch (error) {
     console.error(error)
   }
@@ -290,19 +275,13 @@ const createNewTimeList = async (event:PostProp) => {
     }
   }
   let result = getDefaultResult('Data is not put correctly')
-  console.log('createNewTimeList')
-  console.log(params)
-
   try {
     /* const remainingTasks = */ 
     await dynamo.put(params).promise()
     // console.log(remainingTasks)
-    result = {
-      statusCode: 200,
-      body: JSON.stringify({
-        message: 'created'
-      })
-    }
+    result.body = JSON.stringify({
+      message: 'created'
+    })
   } catch (error) {
     console.error(error)
   }
@@ -318,7 +297,11 @@ function getDefaultResult(message = 'This is NOT correct data'): APIGatewayProxy
     statusCode: 200,
     body: JSON.stringify({
       message
-    })
+    }),
+    headers: {
+      "Access-Control-Allow-Origin" : URL,
+      "Access-Control-Allow-Credentials": "true"
+  },
   }
   return result
 }
@@ -348,7 +331,7 @@ export const getSampleData: APIGatewayProxyHandler =  async (event:GetSampleData
   let result = {
     statusCode: 200,
     body: JSON.stringify({
-      message: sample + '_updated_0509_1125'
+      message: sample + '_updated_0509_1320'
     })
   }
   return result

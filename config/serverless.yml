@@ -1,8 +1,3 @@
-hoge: hoge
-
-huga:
-  hugahuga: hugahuga
-
 service:
   name: todolist3-severside
 # app and org for use with dashboard.serverless.com
@@ -13,7 +8,7 @@ custom:
   webpack:
     webpackConfig: ./webpack.config.js
     includeModules: true
-    packager: 'yarn'
+    packager: "yarn"
   serverless-layers:
     layersDeploymentBucket: ${env:S3_BUCKET}
   serverless-offline:
@@ -32,9 +27,11 @@ custom:
           - 
             table: todolist3-timelist
             sources: [./migrations/timelist.json]
-          -
+          - 
             table: todolist3-remaining-tasks
             sources: [./migrations/remaining-tasks.json]
+  cors-options:
+    origin: ${env:URL}
 
 # Add the serverless-webpack plugin
 plugins:
@@ -62,97 +59,100 @@ provider:
 functions:
   getSampleData:
     handler: src/handler.getSampleData
+    environment:
+      URL: ${env:URL}
     events:
       - http:
-          method: get 
+          method: get
           path: getSampleData
-          cors: true
+          cors: ${self:custom.cors-options}
   getRemainingTasks: #Lambda function name
     handler: src/handler.getRemainingTasks
+    environment:
+      URL: ${env:URL}
     events:
       - http: # API Gateways
-          method: get 
+          method: get
           path: getRemainingTasks
-          cors: true
+          cors: ${self:custom.cors-options}
   postRemaingTasks:
     handler: src/handler.postRemaingTasks
+    environment:
+      URL: ${env:URL}
     events:
       - http:
-          method: post 
+          method: post
           path: postRemaingTasks
-          cors: true
+          cors: ${self:custom.cors-options}
   getTimeLists:
     handler: src/handler.getTimeLists
+    environment:
+      URL: ${env:URL}
     events:
       - http:
-          method: get 
+          method: get
           path: getTimeLists
-          cors: true
+          cors: ${self:custom.cors-options}
   postTimeLists:
     handler: src/handler.postTimeLists
+    environment:
+      URL: ${env:URL}
     events:
       - http:
-          method: post 
+          method: post
           path: postTimeLists
-          cors: true
+          cors: ${self:custom.cors-options}
 
 resources:
   Resources:
     timelistdb:
-      Type: 'AWS::DynamoDB::Table'
+      Type: "AWS::DynamoDB::Table"
       Properties:
         TableName: todolist3-timelist
         AttributeDefinitions:
-          - 
-            AttributeName: userId
+          - AttributeName: userId
             AttributeType: S
-          - 
-            AttributeName: id
+          - AttributeName: id
             AttributeType: N
-          
-          # - 
+
+          # -
           #   AttributeName: userId
           #   AttributeType: S
-          # - 
+          # -
           #   AttributeName: timeListIndex
           #   AttributeType: N
-          # - 
+          # -
           #   AttributeName: title
           #   AttributeType: S
-          # - 
+          # -
           #   AttributeName: content
           #   AttributeType: S
-          # - 
+          # -
           #   AttributeName: isCurrent
           #   AttributeType: B
 
         KeySchema:
-          -
-            AttributeName: userId
+          - AttributeName: userId
             KeyType: HASH
-          -
-            AttributeName: id
+          - AttributeName: id
             KeyType: RANGE
-          
 
         BillingMode: PAY_PER_REQUEST # On-Demand用設定値
     remainingTasksdb:
-      Type: 'AWS::DynamoDB::Table'
+      Type: "AWS::DynamoDB::Table"
       Properties:
         TableName: todolist3-remaining-tasks
         AttributeDefinitions:
-          - 
-            AttributeName: userId
+          - AttributeName: userId
             AttributeType: S
-          # - 
+          # -
           #   AttributeName: id
           #   AttributeType: N
-          # - 
+          # -
           #   AttributeName: content
           #   AttributeType: S
         KeySchema:
-          -
-            AttributeName: userId
+          - AttributeName: userId
             KeyType: HASH
           # -
           #   AttributeName: id

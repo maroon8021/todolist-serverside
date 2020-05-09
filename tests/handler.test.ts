@@ -1,3 +1,5 @@
+process.env.URL = 'test'
+
 import { DynamoDB } from "aws-sdk"
 import { APIGatewayProxyEvent, Context, Callback } from 'aws-lambda';
 import { getRemainingTasks, postRemaingTasks, GetRemainingTasksProp, PostRemainingTasksPropBase, TABLE_NAMES, getTimeLists, PostTimeListsPropBase, PostProp, postTimeLists } from '#/handler'
@@ -20,6 +22,10 @@ describe('RemainingTasks', ():void => {
       statusCode: 200,
       body: {
         content: 'test-content'
+      },
+      headers: {
+        "Access-Control-Allow-Credentials": "true",
+        "Access-Control-Allow-Origin": "test",
       }
     }
     const queryStringParameters = {
@@ -134,6 +140,10 @@ describe('TimeLists', () => {
           title: '',
           content: ''
         }))
+      },
+      headers: {
+        "Access-Control-Allow-Credentials": "true",
+        "Access-Control-Allow-Origin": "test",
       }
     }
     const event:GetRemainingTasksProp = Object.assign(eventBase, {
@@ -159,6 +169,10 @@ describe('TimeLists', () => {
             content: index === 4 ? 'hogehoge' : ''
           }
         })
+      },
+      headers: {
+        "Access-Control-Allow-Credentials": "true",
+        "Access-Control-Allow-Origin": "test",
       }
     }
     const bodyBase:PostTimeListsPropBase = {
@@ -198,6 +212,10 @@ describe('TimeLists', () => {
             content: index === 4 ? 'updated-content' : ''
           }
         })
+      },
+      headers: {
+        "Access-Control-Allow-Credentials": "true",
+        "Access-Control-Allow-Origin": "test",
       }
     }
     let bodyBase:PostTimeListsPropBase = {
