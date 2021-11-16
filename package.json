@@ -13,7 +13,7 @@
     "plugin_install": "sls plugin install -c ./config/serverless.yml -n "
   },
   "dependencies": {
-    "aws-sdk": "^2.668.0",
+    "aws-sdk": "^2.814.0",
     "source-map-support": "^0.5.10"
   },
   "devDependencies": {
